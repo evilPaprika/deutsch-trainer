@@ -2,6 +2,7 @@ import '@mantine/core/styles.css';
 
 import React from 'react';
 import { ColorSchemeScript, MantineProvider } from '@mantine/core';
+import { UserPreferencesProvider } from '@/providers/UserPreferencesProvider';
 import { theme } from '../theme';
 
 export const metadata = {
@@ -11,7 +12,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: any }) {
   return (
-    <html lang="en">
+    <html lang="de-DE">
       <head>
         <ColorSchemeScript />
         <link rel="shortcut icon" href="/favicon.svg" />
@@ -21,7 +22,9 @@ export default function RootLayout({ children }: { children: any }) {
         />
       </head>
       <body>
-        <MantineProvider theme={theme}>{children}</MantineProvider>
+        <MantineProvider theme={theme}>
+          <UserPreferencesProvider>{children}</UserPreferencesProvider>
+        </MantineProvider>
       </body>
     </html>
   );
