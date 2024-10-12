@@ -5,7 +5,7 @@ import EasySpeech from 'easy-speech';
 import { useStore } from 'zustand';
 import { createUserPreferencesStore, UserPreferencesState } from '../stores/userPreferencesStore';
 
-EasySpeech.init({ maxTimeout: 5000, interval: 250 });
+typeof window !== 'undefined' && EasySpeech.init({ maxTimeout: 5000, interval: 250 });
 
 type UserPreferencesStore = ReturnType<typeof createUserPreferencesStore>;
 

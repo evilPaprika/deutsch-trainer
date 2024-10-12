@@ -29,7 +29,9 @@ export function SettingsButton() {
   const selectedVoice = useUserPreferences((state) => state.selectedVoice);
   const setSelectedVoice = useUserPreferences((state) => state.setSelectedVoice);
   const sortedAvailableVoices = sortVoices(
-    EasySpeech.voices().filter((voice) => voice.lang.startsWith('de'))
+    typeof window !== 'undefined'
+      ? EasySpeech.voices().filter((voice) => voice.lang.startsWith('de'))
+      : []
   );
 
   if (!selectedVoice) {

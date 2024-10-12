@@ -11,7 +11,6 @@ import {
   Group,
   Overlay,
   PinInput,
-  Spoiler,
   Stack,
   Text,
 } from '@mantine/core';
