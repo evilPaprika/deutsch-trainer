@@ -37,9 +37,19 @@ export function SettingsButton() {
       easySpeech?.voices()?.filter((voice: SpeechSynthesisVoice) => voice.lang.startsWith('de')) ??
         []
     );
-    setSortedAvailableVoices(voices);
-    if (!selectedVoice && voices.length > 0) {
-      setSelectedVoice(voices[0]);
+
+    // Fix Safari duplicates
+    const uniqueVoicesMap = new Map<string, SpeechSynthesisVoice>();
+    voices.forEach((voice) => {
+      if (!uniqueVoicesMap.has(voice.voiceURI)) {
+        uniqueVoicesMap.set(voice.voiceURI, voice);
+      }
+    });
+    const uniqueVoices = Array.from(uniqueVoicesMap.values());
+
+    setSortedAvailableVoices(uniqueVoices);
+    if (!selectedVoice && uniqueVoices.length > 0) {
+      setSelectedVoice(uniqueVoices[0]);
     }
   }, [easySpeech, selectedVoice, setSelectedVoice]);
 
@@ -62,12 +72,12 @@ export function SettingsButton() {
             label="Stimme auswählen"
             placeholder="Wählen Sie eine Stimme"
             data={sortedAvailableVoices.map((voice) => ({
-              value: voice.name,
+              value: voice.voiceURI,
               label: voice.name,
             }))}
-            value={selectedVoice?.name}
-            onChange={(voiceName) => {
-              const voice = sortedAvailableVoices.find((v) => v.name === voiceName);
+            value={selectedVoice?.voiceURI}
+            onChange={(voiceURI) => {
+              const voice = sortedAvailableVoices.find((v) => v.voiceURI === voiceURI);
               if (voice) {
                 setSelectedVoice(voice);
               }
