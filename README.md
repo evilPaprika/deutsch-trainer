@@ -1,5 +1,9 @@
 # Deutsche Trainer
 
+Links:
+
+- [vercel deployment](https://deutsch-trainer.vercel.app/)
+
 Introducing our new language learning app designed to help users master German numbers through interactive exercises. The app focuses on enhancing listening, speaking, and writing skills by offering three engaging practice modes that cater to different aspects of language acquisition.
 
 The first mode, **"Hören und Ergänzen"** (Listen and Complete), plays a German number aloud, and users are prompted to type in the number they heard. The second mode, **"Sehen und Schreiben"** (See and Write), displays a number on the screen, encouraging users to write it out fully in German words. The third mode, **"Hören und Sprechen"** (Listen and Speak), combines listening and speaking by playing a number and allowing users to record their own pronunciation for comparison. The app also features adjustable settings for speech speed and number range, making it customizable to individual learning needs.
