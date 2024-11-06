@@ -29,8 +29,8 @@ export function ListenAndType() {
 
   const playNumber = async () => {
     if (number !== null && selectedVoice) {
-      setIsPlaying(true);
       try {
+        setIsPlaying(true);
         await easySpeech?.speak({
           text: number.toString(),
           voice: selectedVoice,
