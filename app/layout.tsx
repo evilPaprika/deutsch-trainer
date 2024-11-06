@@ -6,13 +6,13 @@ import { UserPreferencesProvider } from '@/providers/UserPreferencesProvider';
 import { theme } from '../theme';
 
 export const metadata = {
-  title: 'Mantine Next.js template',
-  description: 'I am using Mantine with Next.js!',
+  title: 'Deutsch trainieren',
+  description: 'Trainiere dein Deutsch mit dieser App',
 };
 
 export default function RootLayout({ children }: { children: any }) {
   return (
-    <html lang="de-DE">
+    <html lang="de-DE" suppressHydrationWarning>
       <head>
         <ColorSchemeScript />
         <link rel="shortcut icon" href="/favicon.svg" />

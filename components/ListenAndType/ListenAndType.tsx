@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { IconArrowRight, IconCheck, IconVolume } from '@tabler/icons-react';
-import EasySpeech from 'easy-speech';
 import {
   ActionIcon,
   AspectRatio,
@@ -14,6 +13,8 @@ import {
   Stack,
   Text,
 } from '@mantine/core';
+import { useEasySpeech } from '@/hooks/useEasySpeech';
+// import { useEasySpeech } from '@/providers/EasySpeechProvider';
 import { useUserPreferences } from '@/providers/UserPreferencesProvider';
 
 export function ListenAndType() {
@@ -21,6 +22,7 @@ export function ListenAndType() {
   const [inputValue, setInputValue] = useState('');
   const [isCheckedAnswer, setIsCheckedAnswer] = useState(false);
   const [answerOverlayVisible, setAnswerOverlayVisible] = useState(true);
+  const { easySpeech } = useEasySpeech();
 
   const [isPlaying, setIsPlaying] = useState(false);
   const selectedVoice = useUserPreferences((state) => state.selectedVoice);
@@ -38,7 +40,7 @@ export function ListenAndType() {
     if (number !== null && selectedVoice) {
       setIsPlaying(true);
       try {
-        await EasySpeech.speak({
+        await easySpeech?.speak({
           text: number.toString(),
           voice: selectedVoice,
           start: () => {
@@ -54,6 +56,7 @@ export function ListenAndType() {
         });
       } catch (error) {
         console.error('Speech synthesis failed:', error);
+      } finally {
         setIsPlaying(false);
       }
     } else {

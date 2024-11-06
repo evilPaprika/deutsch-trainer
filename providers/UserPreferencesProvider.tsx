@@ -1,18 +1,15 @@
 'use client';
 
 import { createContext, useContext, useRef } from 'react';
-import EasySpeech from 'easy-speech';
 import { useStore } from 'zustand';
 import { createUserPreferencesStore, UserPreferencesState } from '../stores/userPreferencesStore';
-
-typeof window !== 'undefined' && EasySpeech.init({ maxTimeout: 5000, interval: 250 });
 
 type UserPreferencesStore = ReturnType<typeof createUserPreferencesStore>;
 
 const UserPreferencesContext = createContext<UserPreferencesStore | null>(null);
 
 export const UserPreferencesProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const storeRef = useRef<UserPreferencesStore>();
+  const storeRef = useRef<UserPreferencesStore>(undefined);
 
   if (!storeRef.current) {
     storeRef.current = createUserPreferencesStore();

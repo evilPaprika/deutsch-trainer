@@ -1,9 +1,10 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { IconAdjustments } from '@tabler/icons-react';
-import EasySpeech from 'easy-speech';
 import { ActionIcon, Group, Modal, Select, Stack } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { useEasySpeech } from '@/hooks/useEasySpeech';
 import { useUserPreferences } from '@/providers/UserPreferencesProvider';
 import { ColorSchemeToggle } from './ColorSchemeToggle/ColorSchemeToggle';
 
@@ -25,18 +26,22 @@ const sortVoices = (voices: SpeechSynthesisVoice[]) =>
 
 export function SettingsButton() {
   const [isSettingsOpen, { open, close }] = useDisclosure();
+  const [sortedAvailableVoices, setSortedAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
+  const { easySpeech } = useEasySpeech();
 
   const selectedVoice = useUserPreferences((state) => state.selectedVoice);
   const setSelectedVoice = useUserPreferences((state) => state.setSelectedVoice);
-  const sortedAvailableVoices = sortVoices(
-    typeof window !== 'undefined'
-      ? EasySpeech.voices().filter((voice) => voice.lang.startsWith('de'))
-      : []
-  );
 
-  if (!selectedVoice) {
-    setSelectedVoice(sortedAvailableVoices[0]);
-  }
+  useEffect(() => {
+    const voices = sortVoices(
+      easySpeech?.voices()?.filter((voice: SpeechSynthesisVoice) => voice.lang.startsWith('de')) ??
+        []
+    );
+    setSortedAvailableVoices(voices);
+    if (!selectedVoice && voices.length > 0) {
+      setSelectedVoice(voices[0]);
+    }
+  }, [easySpeech, selectedVoice, setSelectedVoice]);
 
   return (
     <>
@@ -60,18 +65,6 @@ export function SettingsButton() {
               value: voice.name,
               label: voice.name,
             }))}
-            renderOption={(option) => (
-              <Group
-                bg={
-                  voicesSortPreference.findIndex((pref) => option.option.label.includes(pref)) !==
-                  -1
-                    ? '#7dff9344'
-                    : undefined
-                }
-              >
-                {option.option.label}
-              </Group>
-            )}
             value={selectedVoice?.name}
             onChange={(voiceName) => {
               const voice = sortedAvailableVoices.find((v) => v.name === voiceName);
