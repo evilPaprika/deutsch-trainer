@@ -2,17 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { IconArrowRight, IconCheck, IconVolume } from '@tabler/icons-react';
-import {
-  ActionIcon,
-  AspectRatio,
-  Button,
-  Divider,
-  Group,
-  Overlay,
-  PinInput,
-  Stack,
-  Text,
-} from '@mantine/core';
+import { ActionIcon, Button, Divider, Flex, Group, PinInput, Stack, Text } from '@mantine/core';
 import { useEasySpeech } from '@/hooks/useEasySpeech';
 // import { useEasySpeech } from '@/providers/EasySpeechProvider';
 import { useUserPreferences } from '@/providers/UserPreferencesProvider';
@@ -27,13 +17,14 @@ export function ListenAndType() {
   const [isPlaying, setIsPlaying] = useState(false);
   const selectedVoice = useUserPreferences((state) => state.selectedVoice);
 
-  const generateRandomNumber = () => {
+  const nextNumber = () => {
     const min = 100000;
     const max = 999999;
     const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
     setNumber(randomNumber);
     setInputValue('');
     setIsCheckedAnswer(false);
+    setAnswerOverlayVisible(true);
   };
 
   const playNumber = async () => {
@@ -66,7 +57,7 @@ export function ListenAndType() {
 
   // Initialize component
   useEffect(() => {
-    generateRandomNumber();
+    nextNumber();
   }, []);
 
   // Autoplay audio when number changes and voices are loaded
@@ -112,24 +103,27 @@ export function ListenAndType() {
               ✅ Richtig!
             </Text>
           ) : (
-            <Text ta="center" mt="md" size="lg" c="red">
-              ❌ Falsch! Die richtige Antwort ist
-              <AspectRatio
-                maw={100}
-                mah={30}
-                ratio={4}
-                mx="auto"
-                pos="relative"
-                onClick={() => setAnswerOverlayVisible(false)}
-              >
-                {number}
-                <Overlay
+            <Flex align="center" justify="center" mt="md" gap="0.25em" wrap="wrap">
+              <Text size="lg" c="red">
+                ❌ Falsch! Die richtige Antwort ist
+              </Text>
+              {answerOverlayVisible ? (
+                <Button
+                  variant="transparent"
+                  p={0}
+                  m={0}
+                  h="2em"
+                  w="70px"
                   onClick={() => setAnswerOverlayVisible(false)}
-                  color="#000"
-                  backgroundOpacity={answerOverlayVisible ? 1 : 0}
-                />
-              </AspectRatio>
-            </Text>
+                >
+                  █████
+                </Button>
+              ) : (
+                <Text w="70px" size="lg" c="red">
+                  {number}
+                </Text>
+              )}
+            </Flex>
           ))}
         <Group justify="space-between" mt="lg" grow>
           <Button
@@ -144,7 +138,7 @@ export function ListenAndType() {
             <Button
               size="md"
               variant="default"
-              onClick={generateRandomNumber}
+              onClick={nextNumber}
               c={isAnswerCorrect ? 'green' : undefined}
               rightSection={isAnswerCorrect ? <IconArrowRight /> : undefined}
             >
