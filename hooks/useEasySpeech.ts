@@ -1,9 +1,23 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import EasySpeech from 'easy-speech';
 
-typeof window !== 'undefined' && EasySpeech.init({ maxTimeout: 5000, interval: 250 });
-
 export function useEasySpeech() {
-  return { easySpeech: typeof window !== 'undefined' ? EasySpeech : null };
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  useEffect(() => {
+    // Ensure this runs only on the client
+    if (typeof window !== 'undefined') {
+      EasySpeech.init({ maxTimeout: 5000, interval: 250 })
+        .then(() => {
+          setIsInitialized(true);
+        })
+        .catch((e) => {
+          console.error('Error initializing EasySpeech:', e);
+        });
+    }
+  }, []);
+
+  return { easySpeech: typeof window !== 'undefined' && isInitialized ? EasySpeech : null };
 }
